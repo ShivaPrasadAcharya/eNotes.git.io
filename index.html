@@ -3,168 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PSC Notes Manager</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <title>Modern Website</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="fixed-header">
-        <div class="container-fluid">
-                       
-            <!-- Search Bar -->
-            <div class="search-container mb-3">
-                <input type="text" id="searchInput" class="form-control" placeholder="Search notes...">
-                <div id="searchNavigation" class="mt-2 d-none">
-                    <button id="prevMatch" class="btn btn-sm btn-secondary">Previous</button>
-                    <span id="matchCount"></span>
-                    <button id="nextMatch" class="btn btn-sm btn-secondary">Next</button>
-                </div>
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo">YourBrand</div>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search...">
+                <button id="searchButton">Search</button>
             </div>
-
-            <!-- Filters -->
-            <div class="row g-3 mb-3">
-                <div class="col-md-4">
-                    <select id="subjectFilter" class="form-select">
-                        <option value="all">All Subjects</option>
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <select id="titleFilter" class="form-select">
-                        <option value="all">All Titles</option>
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <select id="subtitleFilter" class="form-select">
-                        <option value="all">All Subtitles</option>
-                    </select>
-                </div>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#products">Products</a>
+                <a href="#services">Services</a>
+                <a href="#notes">Notes</a>
+                <a href="#about">About</a>
             </div>
-
-            <!-- Add Note Button -->
-            <button id="showFormBtn" class="btn btn-primary mb-3">
-                <i class="fas fa-plus"></i> Add New Note
-            </button>
+            <button class="mobile-menu-btn">☰</button>
         </div>
-    </div>
+    </nav>
 
-    <div class="container-fluid main-content">
-        <!-- Add/Edit Note Form (Initially Hidden) -->
-        <div id="noteFormContainer" class="card mb-4" style="display: none;">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">Add/Edit Note</h5>
-                <button type="button" class="btn-close" onclick="hideForm()"></button>
-            </div>
-            <div class="card-body">
-                <form id="noteForm">
-                    <div class="row g-3">
-                        <div class="col-md-4">
-                            <label class="form-label">ID Number *</label>
-                            <input type="number" id="idNumber" class="form-control" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Subject *</label>
-                            <input type="text" id="subject" class="form-control" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Title *</label>
-                            <input type="text" id="title" class="form-control" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Subtitle</label>
-                            <input type="text" id="subtitle" class="form-control">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Compiler *</label>
-                            <input type="text" id="compiler" class="form-control" required>
-                        </div>
-                        <div class="col-12">
-                            <label class="form-label">Description *</label>
-                            <textarea id="description" class="form-control" rows="5" required></textarea>
-                            <small class="text-muted">For tables: Use | to separate columns. Example:<br>
-                            |Header 1|Header 2|Header 3|<br>
-                            |Data 1|Data 2|Data 3|</small>
-                        </div>
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-primary">Save Note</button>
-                            <button type="button" id="generateCode" class="btn btn-secondary">Generate Code</button>
-                            <button type="button" class="btn btn-danger" onclick="hideForm()">Cancel</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+    <section class="hero" id="home">
+        <h1>Welcome to YourBrand</h1>
+        <p>Discover amazing products and services</p>
+      
+        <div class="search-results" id="searchResults"></div>
+    </section>
 
-        <!-- Notes Container -->
-        <div id="notesContainer" class="row"></div>
+    <section class="products" id="products">
+        <h2>Our Products</h2>
+        <div class="products-grid" id="productsGrid"></div>
+    </section>
 
-        <!-- Print Modal -->
-        <div class="modal fade" id="printModal" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Print Options</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="printLayout" id="singleColumn" value="single" checked>
-                            <label class="form-check-label" for="singleColumn">Single Column</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="printLayout" id="doubleColumn" value="double">
-                            <label class="form-check-label" for="doubleColumn">Double Column</label>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" onclick="printNote()">Print</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <section class="services" id="services">
+        <h2>Our Services</h2>
+        <div class="services-grid" id="servicesGrid"></div>
+    </section>
+    <section class="notes" id="notes">
+        <h2>My Notes</h2>
+        <div class="notes-grid" id="notesGrid"></div>
+    </section>
 
-        <!-- Code Modal -->
-        <div class="modal fade" id="codeModal" tabindex="-1">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Generated Code</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <pre><code id="generatedCode"></code></pre>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" id="copyCode" class="btn btn-primary">Copy Code</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <section class="testimonials" id="testimonials">
+        <h2>What Our Clients Say</h2>
+        <div class="testimonials-grid" id="testimonialsGrid"></div>
+    </section>
 
-        
+    <footer>
+        <p>&copy; 2024 YourBrand. All rights reserved.</p>
+    </footer>
 
-        <!-- Print Container (Hidden) -->
-        <div id="printContainer" style="display: none;"></div>
-        
-    </div>
-   
-        <div class="maximized-overlay" id="maximizedOverlay">
-            <div class="maximized-note">
-                <div class="maximized-header">
-                    <h4 class="mb-0">Note Details</h4>
-                    <button class="btn btn-sm btn-outline-secondary" onclick="minimizeNote()">
-                        <i class="fas fa-compress"></i>
-                    </button>
-                </div>
-                <div class="card-body" id="maximizedContent"></div>
-            </div>
-        </div>
+    <!-- Data -->
+    <script src="data/products.js"></script>
+    <script src="data/services.js"></script>
+    <script src="data/notes.js"></script>
+    <script src="data/testimonials.js"></script>
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
-    <script src="data.js"></script>
-    <script src="script.js"></script>
+    <!-- Utils -->
+    <script src="js/search.js"></script>
+    <script src="js/mobile.js"></script>
     
+    <!-- Main -->
+    <script src="js/main.js"></script>
 </body>
 </html>
